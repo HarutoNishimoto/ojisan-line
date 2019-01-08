@@ -89,50 +89,6 @@ def handle_message(event):
                 ]
             )
 
-    """
-
-    if event.type == "message":
-        if "おはよう" in event.message.text:
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text='オハヨウ'+ chr(0x10002D) + addName(UN) + '今日も1日頑張ろうネ'+ chr(0x1000A4)),
-                ]
-            )
-        if "おやすみ" in event.message.text:
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text='おやすみ'+ chr(0x10002D) + 'いい夢がみれるといいね' + addName(UN) + chr(0x10008D)),
-                ]
-            )
-        if "ありがとう" in event.message.text:
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text="おじさん役に立ててうれしいよ" + addName(UN) + chr(0x100033)),
-                ]
-            )
-        if ("名前" in event.message.text) and ("変" in event.message.text):
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text= addName(UN) +'，なんて呼んでほしいの'+ chr(0x100036))
-                ]
-            )
-            global chgNameFlag
-            chgNameFlag = True
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(mr.chg2Kana(addName(UN) + "「" + event.message.text + "」って言ったの" + chr(0x100036))),
-                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応するよ" + chr(0x10002F)),
-                ]
-            )
-
-    """
-
 
 
 if __name__ == "__main__":
