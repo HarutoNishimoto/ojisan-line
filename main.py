@@ -24,6 +24,8 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 profile = line_bot_api.get_profile(event.source.user_id)
 UN = profile.display_name
+chgNameFlag = False
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -61,9 +63,6 @@ def handle_message(event):
         else:
             return ""
 
-    chgNameFlag = False
-
-
     if event.type == "message" and (chgNameFlag == False):
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
@@ -93,6 +92,7 @@ def handle_message(event):
                     TextSendMessage(text= addName(UN) +'，なんて呼んでほしいの'+ chr(0x100036))
                 ]
             )
+            global chgNameFlag
             chgNameFlag = True
         else:
             line_bot_api.reply_message(
@@ -111,7 +111,8 @@ def handle_message(event):
                     TextSendMessage(text= "オッケー"+ chr(0x100033) + "いっぱい呼んであげるネ" + chr(0x10000A))
                 ]
             )
-            chgNameFlag = False
+            global chgNameFlag
+            chgNameFlag = True
         elif ("ううん" == event.message.text) or ("いいえ" == event.message.text) or ("ちがう" == event.message.text):
             line_bot_api.reply_message(
                 event.reply_token,
