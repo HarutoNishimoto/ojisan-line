@@ -62,6 +62,47 @@ def handle_message(event):
         else:
             return ""
 
+
+
+    # read
+    df = pd.read_csv("QandA.csv")
+
+
+
+    if "こんにちは" in df["keyword"].values:
+        print("sssss")
+
+        reply_candidates = df[df["keyword"] == "こんにちは"]["reply"].values
+        idx = np.random.randint(len(reply_candidates))
+        print(reply_candidates[idx])
+
+
+
+
+    if event.type == "message":
+        utte = event.message.text
+        if utte in df["keyword"].values:
+            reply_candidates = df[df["keyword"] == utte]["reply"].values
+            idx = np.random.randint(len(reply_candidates))
+            
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text=reply_candidates[idx]),
+                ]
+            )
+        else:
+            line_bot_api.reply_message(
+
+                event.reply_token,
+                [
+                    TextSendMessage("{}「{}」って言ったの{}".format(addName(UN), event.message.text, chr(0x100036))),
+                    TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
+                ]
+            )
+
+    """
+
     if event.type == "message":
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
@@ -101,35 +142,6 @@ def handle_message(event):
                     TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応するよ" + chr(0x10002F)),
                 ]
             )
-
-    """
-
-    if (event.type == "message") and (chgNameFlag == True):
-        if ("うん" == event.message.text) or ("はい" == event.message.text) or ("そう" == event.message.text):
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text= "オッケー"+ chr(0x100033) + "いっぱい呼んであげるネ" + chr(0x10000A))
-                ]
-            )
-            global chgNameFlag
-            chgNameFlag = True
-        elif ("ううん" == event.message.text) or ("いいえ" == event.message.text) or ("ちがう" == event.message.text):
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text= addName(UN) +'，なんて呼んでほしいの'+ chr(0x100036))
-                ]
-            )
-        else:
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text= "「" + event.message.text +"ちゃん」でいいの"+ chr(0x100036))
-                ]
-            )
-            global UN
-            UN = event.message.text
 
     """
 
