@@ -22,10 +22,6 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-profile = line_bot_api.get_profile(event.source.user_id)
-UN = profile.display_name
-chgNameFlag = False
-
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -56,6 +52,9 @@ def handle_message(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
+    profile = line_bot_api.get_profile(event.source.user_id)
+    UN = profile.display_name
+
     def addName(user_name, thres=0.3):
         rand = random.random()
         if rand > thres:
@@ -63,7 +62,7 @@ def handle_message(event):
         else:
             return ""
 
-    if (event.type == "message") and (chgNameFlag == False):
+    if event.type == "message":
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
@@ -103,6 +102,8 @@ def handle_message(event):
                 ]
             )
 
+    """
+
     if (event.type == "message") and (chgNameFlag == True):
         if ("うん" == event.message.text) or ("はい" == event.message.text) or ("そう" == event.message.text):
             line_bot_api.reply_message(
@@ -129,6 +130,8 @@ def handle_message(event):
             )
             global UN
             UN = event.message.text
+
+    """
 
 
 
