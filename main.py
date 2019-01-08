@@ -84,7 +84,7 @@ def handle_message(event):
 
                 event.reply_token,
                 [
-                    TextSendMessage(text="{}「{}」って言ったの{}".format(addName(UN), event.message.text, chr(0x100036))),
+                    #TextSendMessage(text="{}「{}」って言ったの{}".format(addName(UN), event.message.text, chr(0x100036))),
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
                 ]
             )
