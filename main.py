@@ -10,6 +10,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
+import makeReply as mr
 
 app = Flask(__name__)
 
@@ -49,15 +50,15 @@ def handle_message(event):
 def handle_message(event):
 
     if event.type == "message":
-        if (event.message.text == "帰るよー！") or (event.message.text == "帰るよ！") or (event.message.text == "帰る！") or (event.message.text == "帰るよ"):
+        if "おはよう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text='お疲れ様です'+ chr(0x10002D)),
-                    TextSendMessage(text='位置情報を送ってもらうと近くの駅を教えますよ'+ chr(0x10008D)),
+                    TextSendMessage(text='オハヨウ'+ chr(0x10002D)),
+                    TextSendMessage(text='今日も1日頑張ろうネ'+ chr(0x10008D)),
                 ]
             )
-        if event.message.text == "おやすみ":
+        if "おやすみ" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
@@ -65,18 +66,26 @@ def handle_message(event):
                     TextSendMessage(text='NERO'+ chr(0x10008D)),
                 ]
             )
-        if (event.message.text == "ありがとう！") or (event.message.text == "ありがとう") or (event.message.text == "ありがと！") or (event.message.text == "ありがと"):
+        if "ありがとう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="どういたしまして！気をつけて帰ってね" + chr(0x100033)),
+                    TextSendMessage(text="おじさん役に立ててうれしいよ" + chr(0x100033)),
+                ]
+            )
+        if "help" in event.message.text:
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応します．"),
                 ]
             )
         else:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="まだその言葉は教えてもらってないんです"+ chr(0x100029) + chr(0x100098)),
+                    TextSendMessage(mr.chg2Kana(event.message.text + "だね")),
+                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応します．"),
                 ]
             )
 
