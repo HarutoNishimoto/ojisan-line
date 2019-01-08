@@ -63,7 +63,7 @@ def handle_message(event):
         else:
             return ""
 
-    if event.type == "message" and (chgNameFlag == False):
+    if (event.type == "message") and (chgNameFlag == False):
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
