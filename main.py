@@ -37,13 +37,48 @@ def callback():
 
     return 'OK'
 
-# tuiki(kesiteii)
+"""
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text))
+"""
 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+
+    if event.type == "message":
+        if (event.message.text == "帰るよー！") or (event.message.text == "帰るよ！") or (event.message.text == "帰る！") or (event.message.text == "帰るよ"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text='お疲れ様です'+ chr(0x10002D)),
+                    TextSendMessage(text='位置情報を送ってもらうと近くの駅を教えますよ'+ chr(0x10008D)),
+                ]
+            )
+        if event.message.text == "おやすみ":
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text='OYASUMI'+ chr(0x10002D)),
+                    TextSendMessage(text='NERO'+ chr(0x10008D)),
+                ]
+            )
+        if (event.message.text == "ありがとう！") or (event.message.text == "ありがとう") or (event.message.text == "ありがと！") or (event.message.text == "ありがと"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="どういたしまして！気をつけて帰ってね" + chr(0x100033)),
+                ]
+            )
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="まだその言葉は教えてもらってないんです"+ chr(0x100029) + chr(0x100098)),
+                ]
+            )
 
 if __name__ == "__main__":
 #    app.run()
