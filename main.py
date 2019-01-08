@@ -11,6 +11,7 @@ from linebot.models import (
 )
 import os
 import makeReply as mr
+import random
 
 app = Flask(__name__)
 
@@ -49,28 +50,38 @@ def handle_message(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
+    profile = line_bot_api.get_profile(event.source.user_id)
+    UN = profile.display_name
+    def addName(user_name, thres=0.4):
+        rand = random.random()
+        if rand > thres:
+            return user_name + "チャン"
+        else:
+            return ""
+
+
     if event.type == "message":
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
                     TextSendMessage(text='オハヨウ'+ chr(0x10002D)),
-                    TextSendMessage(text='今日も1日頑張ろうネ'+ chr(0x10008D)),
+                    TextSendMessage(text=addName(UN) + '今日も1日頑張ろうネ'+ chr(0x10008D)),
                 ]
             )
         if "おやすみ" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text='OYASUMI'+ chr(0x10002D)),
-                    TextSendMessage(text='NERO'+ chr(0x10008D)),
+                    TextSendMessage(text='おやすみ'+ chr(0x10002D)),
+                    TextSendMessage(text='いい夢がみれるといいね' + addName(UN) + chr(0x10008D)),
                 ]
             )
         if "ありがとう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="おじさん役に立ててうれしいよ" + chr(0x100033)),
+                    TextSendMessage(text="おじさん役に立ててうれしいよ" + addName(UN) + chr(0x100033)),
                 ]
             )
         if "help" in event.message.text:
@@ -84,7 +95,7 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(mr.chg2Kana(event.message.text + "だね")),
+                    TextSendMessage(mr.chg2Kana(addName(UN) + "「" + event.message.text + "」って言ったの？")),
                     TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応します．"),
                 ]
             )
