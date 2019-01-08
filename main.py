@@ -22,6 +22,9 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+profile = line_bot_api.get_profile(event.source.user_id)
+UN = profile.display_name
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -40,6 +43,7 @@ def callback():
     return 'OK'
 
 """
+# オウム返し
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_bot_api.reply_message(
@@ -50,31 +54,29 @@ def handle_message(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    profile = line_bot_api.get_profile(event.source.user_id)
-    UN = profile.display_name
-    def addName(user_name, thres=0.4):
+    def addName(user_name, thres=0.3):
         rand = random.random()
         if rand > thres:
-            return user_name + "チャン"
+            return user_name + "チャン" + chr(0x10008D) 
         else:
             return ""
 
+    chgNameFlag = False
 
-    if event.type == "message":
+
+    if event.type == "message" and (chgNameFlag == False):
         if "おはよう" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text='オハヨウ'+ chr(0x10002D)),
-                    TextSendMessage(text=addName(UN) + '今日も1日頑張ろうネ'+ chr(0x10008D)),
+                    TextSendMessage(text='オハヨウ'+ chr(0x10002D) + addName(UN) + '今日も1日頑張ろうネ'+ chr(0x1000A4)),
                 ]
             )
         if "おやすみ" in event.message.text:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text='おやすみ'+ chr(0x10002D)),
-                    TextSendMessage(text='いい夢がみれるといいね' + addName(UN) + chr(0x10008D)),
+                    TextSendMessage(text='おやすみ'+ chr(0x10002D) + 'いい夢がみれるといいね' + addName(UN) + chr(0x10008D)),
                 ]
             )
         if "ありがとう" in event.message.text:
@@ -84,21 +86,50 @@ def handle_message(event):
                     TextSendMessage(text="おじさん役に立ててうれしいよ" + addName(UN) + chr(0x100033)),
                 ]
             )
-        if "help" in event.message.text:
+        if ("名前" in event.message.text) and ("変" in event.message.text):
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応します．"),
+                    TextSendMessage(text= addName(UN) +'，なんて呼んでほしいの'+ chr(0x100036))
+                ]
+            )
+            chgNameFlag = True
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(mr.chg2Kana(addName(UN) + "「" + event.message.text + "」って言ったの" + chr(0x100036))),
+                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応するよ" + chr(0x10002F)),
+                ]
+            )
+
+    if (event.type == "message") and (chgNameFlag == True):
+        if ("うん" == event.message.text) or ("はい" == event.message.text) or ("そう" == event.message.text):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text= "オッケー"+ chr(0x100033) + "いっぱい呼んであげるネ" + chr(0x10000A))
+                ]
+            )
+            chgNameFlag = False
+        elif ("ううん" == event.message.text) or ("いいえ" == event.message.text) or ("ちがう" == event.message.text):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text= addName(UN) +'，なんて呼んでほしいの'+ chr(0x100036))
                 ]
             )
         else:
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(mr.chg2Kana(addName(UN) + "「" + event.message.text + "」って言ったの？")),
-                    TextSendMessage(text="おはよう，おやすみ，ありがとう，に反応します．"),
+                    TextSendMessage(text= "「" + event.message.text +"ちゃん」でいいの"+ chr(0x100036))
                 ]
             )
+            global UN
+            UN = event.message.text
+
+
 
 if __name__ == "__main__":
 #    app.run()
