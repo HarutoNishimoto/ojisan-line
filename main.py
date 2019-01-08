@@ -62,22 +62,8 @@ def handle_message(event):
         else:
             return ""
 
-
-
     # read
     df = pd.read_csv("QandA.csv")
-
-
-
-    if "こんにちは" in df["keyword"].values:
-        print("sssss")
-
-        reply_candidates = df[df["keyword"] == "こんにちは"]["reply"].values
-        idx = np.random.randint(len(reply_candidates))
-        print(reply_candidates[idx])
-
-
-
 
     if event.type == "message":
         utte = event.message.text
@@ -96,7 +82,7 @@ def handle_message(event):
 
                 event.reply_token,
                 [
-                    TextSendMessage("{}「{}」って言ったの{}".format(addName(UN), event.message.text, chr(0x100036))),
+                    TextSendMessage(text="{}「{}」って言ったの{}".format(addName(UN), event.message.text, chr(0x100036))),
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
                 ]
             )
