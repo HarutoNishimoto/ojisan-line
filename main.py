@@ -12,6 +12,8 @@ from linebot.models import (
 import os
 import makeReply as mr
 import random
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 
