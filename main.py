@@ -68,11 +68,15 @@ def handle_message(event):
     df = pd.read_csv("QandA.csv")
 
     if event.type == "message":
+
         utte = event.message.text
-        if utte in df["keyword"].values:
-            reply_candidates = df[df["keyword"] == utte]["reply"].values
+        reply_candidates = []
+        for i, val in enumerate(df["keyword"].values):
+            if val in utte:
+                reply_candidates.append(str(df.at[i, "reply"]))
+
+        if len(reply_candidates) > 0:
             idx = np.random.randint(len(reply_candidates))
-            
             line_bot_api.reply_message(
                 event.reply_token,
                 [
