@@ -5,6 +5,9 @@ from googletrans import Translator
 
 # 日本語を翻訳してreturn
 def translation(utterance, lang="en"):
+	# 翻訳ミスの防止
+	if "おじさん" in utterance:
+		utterance = utterance.replace("おじさん", "私")
     translator = Translator()
     return translator.translate(utterance, src='ja' ,dest=lang).text
 

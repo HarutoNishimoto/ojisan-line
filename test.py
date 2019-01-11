@@ -21,6 +21,6 @@ if __name__ == '__main__':
             print("該当なし")
 
     translator = Translator()
-    print(type(translator.translate('ベルリンの壁', src='ja' ,dest='en').text))
+    print(translator.translate('おじさんは元気です', src='ja' ,dest='en').text)
 
 
