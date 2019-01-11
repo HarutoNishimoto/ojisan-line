@@ -25,10 +25,18 @@ line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 NAME = "nishimoto"
+CHG_NAME = False
 
 def chgName(after_name):
     global NAME
     NAME = after_name
+
+def chgNameFlag():
+    global CHG_NAME
+    if CHG_NAME == False:
+        CHG_NAME = True
+    if CHG_NAME == True:
+        CHG_NAME = False
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -87,9 +95,24 @@ def handle_message(event):
             )
 
     if event.type == "message":
-        if "変更" in event.message.text:
-            chgName("haruto")
-            
+        if ("名前" in event.message.text) and ("変" in event.message.text):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
+                ]
+            )
+            chgNameFlag()
+    if (event.type == "message") and (CHG_NAME == True):
+        chgName(event.message.text)
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text="{}って呼ぶね"),
+            ]
+        )
+        chgNameFlag()        
+
 
 
 if __name__ == "__main__":
