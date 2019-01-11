@@ -24,9 +24,11 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-global NAME
 NAME = "nishimoto"
 
+def chgName(after_name):
+    global NAME
+    NAME = after_name
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -86,8 +88,7 @@ def handle_message(event):
 
     if event.type == "message":
         if "変更" in event.message.text:
-            global NAME
-            NAME = "haruto"
+            chgName("haruto")
             
 
 
