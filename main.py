@@ -68,7 +68,8 @@ def handle_message(event):
 def handle_message(event):
 
     profile = line_bot_api.get_profile(event.source.user_id)
-    chgName(profile.display_name) if NAME == None
+    if NAME == None:
+        chgName(profile.display_name)
 
     if event.type == "message":
         # 名前変更
