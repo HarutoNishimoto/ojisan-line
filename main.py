@@ -24,7 +24,7 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-NAME = "nishimoto"
+NAME = None
 CHG_NAME = False
 
 def chgName(after_name):
@@ -68,9 +68,29 @@ def handle_message(event):
 def handle_message(event):
 
     profile = line_bot_api.get_profile(event.source.user_id)
-    UN = profile.display_name
+    chgName(profile.display_name) if NAME == None
 
     if event.type == "message":
+        # 名前変更
+        if ("名前" in event.message.text) and ("変" in event.message.text):
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
+                ]
+            )
+            chgNameFlag()
+        if CHG_NAME == True:
+            chgName(event.message.text)
+            line_bot_api.reply_message(
+                event.reply_token,
+                [
+                    TextSendMessage(text="{}って呼ぶね"),
+                ]
+            )
+            chgNameFlag()     
+
+
         utterance = event.message.text
         reply_candidates = mr.selectKey(utterance)
 
@@ -94,6 +114,7 @@ def handle_message(event):
                 ]
             )
 
+    """
     if event.type == "message":
         if ("名前" in event.message.text) and ("変" in event.message.text):
             line_bot_api.reply_message(
@@ -111,7 +132,9 @@ def handle_message(event):
                 TextSendMessage(text="{}って呼ぶね"),
             ]
         )
-        chgNameFlag()        
+        chgNameFlag()   
+    """
+
 
 
 
