@@ -8,7 +8,7 @@ def addName(user_name, thres=0.3):
 	if rand > thres:
 		return user_name + "チャン" + chr(0x10008D) 
 	else:
-		return ""
+		return user_name
 
 def transReply(utterance, user_name):
 
