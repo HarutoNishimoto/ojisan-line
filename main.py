@@ -14,6 +14,7 @@ import makeReply as mr
 import numpy as np
 import pandas as pd
 
+
 app = Flask(__name__)
 
 #環境変数取得
@@ -66,6 +67,7 @@ def handle_message(event):
                 event.reply_token,
                 [
                     TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addName(UN))),
+                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addName(UN)))),
                 ]
             )
         else:
