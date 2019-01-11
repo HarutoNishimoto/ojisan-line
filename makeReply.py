@@ -43,9 +43,6 @@ def selectKey(utterance):
 		if chk_all_in:
 			reply_candidates.append(str(df.at[i, "reply"]))
 
-
-
-
 	return reply_candidates
 
 if __name__ == '__main__':
