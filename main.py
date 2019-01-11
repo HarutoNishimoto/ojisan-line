@@ -80,7 +80,7 @@ def handle_message(event):
                     TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
                 ]
             )
-            chgNameFlag()
+            CHG_NAME = True
         if CHG_NAME == True:
             chgName(event.message.text)
             line_bot_api.reply_message(
@@ -89,7 +89,8 @@ def handle_message(event):
                     TextSendMessage(text="{}って呼ぶね".format(NAME)),
                 ]
             )
-            chgNameFlag()     
+            CHG_NAME = False
+            
 
 
         utterance = event.message.text
