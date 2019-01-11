@@ -11,7 +11,6 @@ from linebot.models import (
 )
 import os
 import makeReply as mr
-import random
 import numpy as np
 import pandas as pd
 
@@ -57,30 +56,16 @@ def handle_message(event):
     profile = line_bot_api.get_profile(event.source.user_id)
     UN = profile.display_name
 
-    def addName(user_name, thres=0.3):
-        rand = random.random()
-        if rand > thres:
-            return user_name + "チャン" + chr(0x10008D) 
-        else:
-            return ""
-
-    # read
-    df = pd.read_csv("QandA.csv")
-
     if event.type == "message":
-
-        utte = event.message.text
-        reply_candidates = []
-        for i, val in enumerate(df["keyword"].values):
-            if val in utte:
-                reply_candidates.append(str(df.at[i, "reply"]))
+        utterance = event.message.text
+        reply_candidates = mr.selectKey(utterance)
 
         if len(reply_candidates) > 0:
             idx = np.random.randint(len(reply_candidates))
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text=mr.transReply(reply_candidates[idx], UN)),
+                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addName(UN))),
                 ]
             )
         else:
@@ -92,7 +77,6 @@ def handle_message(event):
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
                 ]
             )
-
 
 
 if __name__ == "__main__":
