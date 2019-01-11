@@ -8,8 +8,8 @@ def translation(utterance, lang="en"):
 	# 翻訳ミスの防止
 	if "おじさん" in utterance:
 		utterance = utterance.replace("おじさん", "私")
-    translator = Translator()
-    return translator.translate(utterance, src='ja' ,dest=lang).text
+	translator = Translator()
+	return translator.translate(utterance, src='ja' ,dest=lang).text
 
 def addName(user_name, thres=0.3):
 	rand = random.random()
