@@ -24,6 +24,8 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
+NAME = "nishimoto"
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -77,8 +79,15 @@ def handle_message(event):
                 [
                     TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addName(UN), event.message.text, chr(0x100036))),
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
+                    TextSendMessage(text=NAME),
                 ]
             )
+
+    if event.type == "message":
+        if "変更" in event.message.text:
+            global NAME
+            NAME = "haruto"
+            
 
 
 if __name__ == "__main__":
