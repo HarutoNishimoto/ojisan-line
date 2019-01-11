@@ -11,7 +11,7 @@ def translation(utterance, lang="de"):
 	translator = Translator()
 	return translator.translate(utterance, src='ja' ,dest=lang).text
 
-def addName(user_name, thres=0.3):
+def addChan(user_name, thres=0):
 	rand = random.random()
 	if rand > thres:
 		return user_name + "チャン" + chr(0x10008D) 

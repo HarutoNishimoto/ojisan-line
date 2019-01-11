@@ -100,8 +100,8 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addName(UN))),
-                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addName(UN)))),
+                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(NAME))),
+                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(NAME)))),
                 ]
             )
         else:
@@ -109,9 +109,8 @@ def handle_message(event):
 
                 event.reply_token,
                 [
-                    TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addName(UN), event.message.text, chr(0x100036))),
+                    TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addChan(NAME), event.message.text, chr(0x100036))),
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
-                    TextSendMessage(text=NAME),
                 ]
             )
 
