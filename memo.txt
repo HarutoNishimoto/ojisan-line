@@ -2,6 +2,9 @@
 
 pip freezeでpipでとったもののversionが確認できる
 
+【TODO】
+global変数が欲しい
+
 
 190108
 
@@ -21,3 +24,8 @@ mecabが入らない
 190109
 csvでの絵文字やNAMEに反応できるようにしたい
 反応できるようになりました
+
+190111
+外国語を話せるおじさんになりました
+heroku logs --tail -a ojisan-line
+でlogを見ながら開発すると，ビルド成功したかがわかる．

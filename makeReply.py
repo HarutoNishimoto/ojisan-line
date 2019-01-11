@@ -4,7 +4,7 @@ import random
 from googletrans import Translator
 
 # 日本語を翻訳してreturn
-def translation(utterance, lang="en"):
+def translation(utterance, lang="de"):
 	# 翻訳ミスの防止
 	if "おじさん" in utterance:
 		utterance = utterance.replace("おじさん", "私")
