@@ -86,7 +86,7 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="{}って呼ぶね"),
+                    TextSendMessage(text="{}って呼ぶね".format(NAME)),
                 ]
             )
             chgNameFlag()     
@@ -104,7 +104,7 @@ def handle_message(event):
                     TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(NAME)))),
                 ]
             )
-        else:
+        elif CHG_NAME == False:
             line_bot_api.reply_message(
 
                 event.reply_token,
