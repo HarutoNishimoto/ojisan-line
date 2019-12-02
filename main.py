@@ -63,16 +63,6 @@ def callback():
 
 
 
-"""
-
-# オウム返し
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
-
-"""
 
 
 
@@ -87,7 +77,8 @@ def handle_message(event):
 
     if event.type == "message":
 
-        # 名前変更
+        '''
+        # 名前変更についての条件分岐（うまくいかないので除いています）
         if ("名前" in event.message.text) and ("変" in event.message.text):
             line_bot_api.reply_message(
                 event.reply_token,
@@ -105,6 +96,7 @@ def handle_message(event):
                 ]
             )
             UN.chg_flag = False
+        '''
             
         utterance = event.message.text
         reply_candidates = mr.selectKey(utterance)
@@ -115,8 +107,9 @@ def handle_message(event):
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(UN.name))),
-                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(UN.name)))),
+                    # 応答生成と翻訳の
+                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(UN.name)))
+                    #TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(UN.name)))),
                 ]
             )
         # 応答を用意していない場合
