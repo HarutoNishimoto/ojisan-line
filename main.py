@@ -55,13 +55,22 @@ def callback():
 
     return 'OK'
 
+
+
+
+"""
+
 # オウム返し
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text))
+
+
 """
+
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -113,29 +122,6 @@ def handle_message(event):
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
                 ]
             )
-
-    '''
-    if event.type == "message":
-        if ("名前" in event.message.text) and ("変" in event.message.text):
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
-                ]
-            )
-            chgNameFlag()
-    if (event.type == "message") and (CHG_NAME == True):
-        chgName(event.message.text)
-        line_bot_api.reply_message(
-            event.reply_token,
-            [
-                TextSendMessage(text="{}って呼ぶね"),
-            ]
-        )
-        chgNameFlag()   
-    '''
-
-"""
 
 
 
