@@ -24,19 +24,25 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-NAME = None
-CHG_NAME = False
 
-def chgName(after_name):
-    global NAME
-    NAME = after_name
+class userName():
+    """docstring for ClassName"""
+    def __init__(self):
+        self.name = None
+        self.chg_flag = False
 
-def chgNameFlag():
-    global CHG_NAME
-    if CHG_NAME == False:
-        CHG_NAME = True
-    if CHG_NAME == True:
-        CHG_NAME = False
+
+    def chgName(self, name):
+        self.name = name
+
+    def chgNameFlag(self):
+        if self.chg_flag == False:
+            self.chg_flag = True
+        if self.chg_flag == True:
+            self.chg_flag = False
+
+
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -67,7 +73,6 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=event.message.text))
 
-
 """
 
 
@@ -75,11 +80,14 @@ def handle_message(event):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
+    UN = userName()
+
     profile = line_bot_api.get_profile(event.source.user_id)
-    if NAME == None:
-        chgName(profile.display_name)
+    if UN.name == None:
+        UN.chgName(profile.display_name)
 
     if event.type == "message":
+
         # 名前変更
         if ("名前" in event.message.text) and ("変" in event.message.text):
             line_bot_api.reply_message(
@@ -88,37 +96,37 @@ def handle_message(event):
                     TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
                 ]
             )
-            CHG_NAME = True
-        if CHG_NAME == True:
-            chgName(event.message.text)
+            UN.chg_flag = True
+        if UN.chg_flag == True:
+            UN.chgName(event.message.text)
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text="{}って呼ぶね".format(NAME)),
+                    TextSendMessage(text="{}って呼ぶね".format(UN.name)),
                 ]
             )
-            CHG_NAME = False
+            UN.chg_flag = False
             
-
-
         utterance = event.message.text
         reply_candidates = mr.selectKey(utterance)
 
+        # 応答を用意している場合
         if len(reply_candidates) > 0:
             idx = np.random.randint(len(reply_candidates))
             line_bot_api.reply_message(
                 event.reply_token,
                 [
-                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(NAME))),
-                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(NAME)))),
+                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(UN.name))),
+                    TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(UN.name)))),
                 ]
             )
-        elif CHG_NAME == False:
+        # 応答を用意していない場合
+        elif UN.chg_flag == False:
             line_bot_api.reply_message(
 
                 event.reply_token,
                 [
-                    TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addChan(NAME), event.message.text, chr(0x100036))),
+                    TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addChan(UN.name), event.message.text, chr(0x100036))),
                     TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
                 ]
             )

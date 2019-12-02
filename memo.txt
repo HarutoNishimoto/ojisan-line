@@ -2,6 +2,14 @@
 
 pip freezeでpipでとったもののversionが確認できる
 
+
+heroku logs --tail -a ojisan-line
+を走らせて，logを確認できる
+2019-12-02T05:02:56.000000+00:00 app[api]: Build succeeded
+というコメントが出るまでしばらく待つ
+
+
+
 【TODO】
 global変数が欲しい
 
