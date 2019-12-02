@@ -31,9 +31,8 @@ class userName():
         self.name = None
         self.chg_flag = False
 
-
-    def chgName(self, name):
-        self.name = name
+    def chgName(self, newname):
+        self.name = newname
 
     def chgNameFlag(self):
         if self.chg_flag == False:
