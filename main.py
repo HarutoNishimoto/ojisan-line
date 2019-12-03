@@ -13,6 +13,7 @@ import os
 import makeReply as mr
 import numpy as np
 import pandas as pd
+#from makeReply import userUtteranceInfo as UUI
 
 
 app = Flask(__name__)
@@ -23,24 +24,6 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
-
-
-class userName():
-    """docstring for ClassName"""
-    def __init__(self):
-        self.name = None
-        self.chg_flag = False
-
-    def chgName(self, newname):
-        self.name = newname
-
-    def chgNameFlag(self):
-        if self.chg_flag == False:
-            self.chg_flag = True
-        if self.chg_flag == True:
-            self.chg_flag = False
-
-
 
 
 @app.route("/callback", methods=['POST'])
@@ -62,28 +45,18 @@ def callback():
 
 
 
-
-
-
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    UN = userName()
     profile = line_bot_api.get_profile(event.source.user_id)
-    if UN.name == None:
-        UN.chgName(profile.display_name)
 
     if event.type == "message":            
-        utterance = event.message.text
-        response_candidates = mr.getResponseCandidate(utterance)
-
+        UUI = mr.getResponseCandidate(event.message.text, profile.display_name)
         # 応答生成
-        response = np.random.choice(response_candidates)
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text=mr.transReply(response, UN.name))
+                TextSendMessage(text=mr.parseResponse(UUI))
             ]
         )
 
