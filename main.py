@@ -70,58 +70,22 @@ def callback():
 def handle_message(event):
 
     UN = userName()
-
     profile = line_bot_api.get_profile(event.source.user_id)
     if UN.name == None:
         UN.chgName(profile.display_name)
 
-    if event.type == "message":
-
-        '''
-        # 名前変更についての条件分岐（うまくいかないので除いています）
-        if ("名前" in event.message.text) and ("変" in event.message.text):
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text="なんて呼んで欲しいの" + chr(0x100036)),
-                ]
-            )
-            UN.chg_flag = True
-        if UN.chg_flag == True:
-            UN.chgName(event.message.text)
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    TextSendMessage(text="{}って呼ぶね".format(UN.name)),
-                ]
-            )
-            UN.chg_flag = False
-        '''
-            
+    if event.type == "message":            
         utterance = event.message.text
-        reply_candidates = mr.selectKey(utterance)
+        response_candidates = mr.getResponseCandidate(utterance)
 
-        # 応答を用意している場合
-        if len(reply_candidates) > 0:
-            idx = np.random.randint(len(reply_candidates))
-            line_bot_api.reply_message(
-                event.reply_token,
-                [
-                    # 応答生成と翻訳の
-                    TextSendMessage(text=mr.transReply(reply_candidates[idx], mr.addChan(UN.name)))
-                    #TextSendMessage(text=mr.translation(mr.transReplyForForeign(reply_candidates[idx], mr.addChan(UN.name)))),
-                ]
-            )
-        # 応答を用意していない場合
-        elif UN.chg_flag == False:
-            line_bot_api.reply_message(
-
-                event.reply_token,
-                [
-                    TextSendMessage(text="{}「{}」って言ったの{}".format(mr.addChan(UN.name), event.message.text, chr(0x100036))),
-                    TextSendMessage(text="その言葉は知らないナァ" + chr(0x10002F)),
-                ]
-            )
+        # 応答生成
+        response = np.random.choice(response_candidates)
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text=mr.transReply(response, UN.name))
+            ]
+        )
 
 
 
